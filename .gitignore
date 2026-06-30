@@ -1,0 +1,29 @@
+# Vivado generated files
+*.jou
+*.log
+*.rpt
+*.pb
+*.wdb
+*.vcd
+*.str
+*.dmp
+*.backup.jou
+*.backup.log
+
+# Vivado generated folders
+*.runs/
+*.sim/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.gen/
+.Xil/
+
+# Bitstream / implementation outputs
+*.bit
+*.ltx
+*.xpr
+
+# Windows
+Thumbs.db
+Desktop.ini
