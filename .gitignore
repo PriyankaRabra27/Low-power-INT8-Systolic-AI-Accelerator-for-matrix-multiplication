@@ -1,6 +1,36 @@
+# Icarus Verilog / Python simulation artifacts
 *.vcd
 sim_pe_mac
 sim_array
 sim_top
 __pycache__/
 *.pyc
+
+# Vivado generated files
+*.jou
+*.log
+*.rpt
+*.pb
+*.wdb
+*.str
+*.dmp
+*.backup.jou
+*.backup.log
+
+# Vivado generated folders
+*.runs/
+*.sim/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.gen/
+.Xil/
+
+# Bitstream / implementation outputs
+*.bit
+*.ltx
+*.xpr
+
+# Windows
+Thumbs.db
+Desktop.ini
