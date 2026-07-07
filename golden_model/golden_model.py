@@ -79,9 +79,77 @@ class SystolicArray4x4Golden:
         self.prev_valid_out = new_valid_out
 
         return c
-
-
     
+class ControllerGolden:
+    def __init__(self):
+        self.current_state="IDLE"
+        self.cycle_count=0
+
+    def step(self,rst,start):
+        if rst:
+            self.current_state="IDLE"
+            self.cycle_count=0
+            return 0,0,0,0 #clear,enable,valid_in,done
+
+        if self.current_state == "IDLE":
+            clear = 0
+            enable = 0
+            valid_in = 0
+            done = 0
+            if start:
+                self.current_state = "CLEAR"
+            else:
+                self.current_state="IDLE"
+        
+        elif self.current_state == "CLEAR":
+            clear=1
+            enable=0
+            valid_in=0
+            done=0
+            self.current_state="RUN"
+        
+        elif self.current_state == "RUN":
+            clear=0
+            enable=1
+            done=0
+            if self.cycle_count <= 6:
+                valid_in = 1
+            else:
+                valid_in=0
+            if self.cycle_count == 9:
+                self.current_state="DONE"
+            else:
+                self.current_state = "RUN"
+
+            self.cycle_count=self.cycle_count+1
+
+        elif self.current_state == "DONE":
+            clear = 0
+            enable = 0
+            valid_in = 0
+            done = 1
+            self.current_state = "IDLE"
+
+        
+        return clear, enable, valid_in, done
+    
+class TopAcceleratorGolden:
+    def __init__(self):
+        self.ctrl=ControllerGolden()
+        self.array=SystolicArray4x4Golden()
+
+    def step(self,rst, start, a_ext, b_ext):
+        clear, enable, valid_in, done=self.ctrl.step(rst,start)
+        c=self.array.step(clear,rst,enable,valid_in, a_ext, b_ext)
+        return c, done
+    
+        
+        
+        
+        
+
+
+     
         
 
 
