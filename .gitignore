@@ -1,0 +1,6 @@
+*.vcd
+sim_pe_mac
+sim_array
+sim_top
+__pycache__/
+*.pyc
