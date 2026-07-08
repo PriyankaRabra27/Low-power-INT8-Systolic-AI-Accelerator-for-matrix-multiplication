@@ -38,9 +38,24 @@ module top_ai_accelerator (
     output logic done
 );
 
+    // 8 new wires to hold the skewed values
+    logic signed [7:0] a0_skewed, a1_skewed, a2_skewed, a3_skewed;
+    logic signed [7:0] b0_skewed, b1_skewed, b2_skewed, b3_skewed;
+
     logic clear;
     logic valid_in;
     logic enable;
+
+    input_skew skew_inst (
+        .clk(clk),
+        .rst(rst),
+        .enable(enable),
+        .a0_in(a0_in), .a1_in(a1_in), .a2_in(a2_in), .a3_in(a3_in),
+        .b0_in(b0_in), .b1_in(b1_in), .b2_in(b2_in), .b3_in(b3_in),
+        .a0_out(a0_skewed), .a1_out(a1_skewed), .a2_out(a2_skewed), .a3_out(a3_skewed),
+        .b0_out(b0_skewed), .b1_out(b1_skewed), .b2_out(b2_skewed), .b3_out(b3_skewed)
+    );
+
 
     controller ctrl_inst (
         .clk(clk),
@@ -59,15 +74,14 @@ module top_ai_accelerator (
         .rst(rst),
         .valid_in(valid_in),
 
-        .a0_in(a0_in),
-        .a1_in(a1_in),
-        .a2_in(a2_in),
-        .a3_in(a3_in),
-
-        .b0_in(b0_in),
-        .b1_in(b1_in),
-        .b2_in(b2_in),
-        .b3_in(b3_in),
+        .a0_in(a0_skewed),
+        .a1_in(a1_skewed),
+        .a2_in(a2_skewed),
+        .a3_in(a3_skewed),
+        .b0_in(b0_skewed),
+        .b1_in(b1_skewed),
+        .b2_in(b2_skewed),
+        .b3_in(b3_skewed),
 
         .c00_out(c00_out),
         .c01_out(c01_out),

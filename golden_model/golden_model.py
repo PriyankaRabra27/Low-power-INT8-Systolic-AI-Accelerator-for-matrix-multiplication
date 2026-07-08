@@ -137,13 +137,53 @@ class TopAcceleratorGolden:
     def __init__(self):
         self.ctrl=ControllerGolden()
         self.array=SystolicArray4x4Golden()
+        self.skew=InputSkewGolden()
 
     def step(self,rst, start, a_ext, b_ext):
         clear, enable, valid_in, done=self.ctrl.step(rst,start)
-        c=self.array.step(clear,rst,enable,valid_in, a_ext, b_ext)
+        a_skewed, b_skewed = self.skew.step(a_ext,b_ext)
+        c=self.array.step(clear,rst,enable,valid_in, a_skewed, b_skewed)
         return c, done
-    
-        
+
+
+class SkewDelayGolden:
+    def __init__(self, delay):
+        self.delay=delay
+        self.queue=[0]*delay
+
+    def step(self,value):
+        self.queue.append(value)
+        oldest_value = self.queue.pop(0)
+        return oldest_value
+
+class InputSkewGolden:
+    def __init__(self):
+        self.skew_a0=SkewDelayGolden(0)
+        self.skew_a1=SkewDelayGolden(1)
+        self.skew_a2=SkewDelayGolden(2)
+        self.skew_a3=SkewDelayGolden(3)
+        self.skew_b0=SkewDelayGolden(0)
+        self.skew_b1=SkewDelayGolden(1)
+        self.skew_b2=SkewDelayGolden(2)
+        self.skew_b3=SkewDelayGolden(3)
+
+    def step(self, a_ext, b_ext):
+        a0_out = self.skew_a0.step(a_ext[0])
+        a1_out = self.skew_a1.step(a_ext[1])
+        a2_out = self.skew_a2.step(a_ext[2])
+        a3_out = self.skew_a3.step(a_ext[3])
+
+        b0_out = self.skew_b0.step(b_ext[0])
+        b1_out = self.skew_b1.step(b_ext[1])
+        b2_out = self.skew_b2.step(b_ext[2])
+        b3_out = self.skew_b3.step(b_ext[3])
+
+        a_skewed = [a0_out, a1_out, a2_out, a3_out]
+        b_skewed = [b0_out, b1_out, b2_out, b3_out]
+        return a_skewed, b_skewed
+
+
+
         
         
         

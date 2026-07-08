@@ -57,7 +57,7 @@ module controller (
                 enable   = 1'b0;
                 valid_in = 1'b0;
                 done     = 1'b0;
-                next_state = start ? CLEAR : IDLE;
+                next_state = state_t'(start ? CLEAR : IDLE);
             end
 
             CLEAR: begin
@@ -73,7 +73,7 @@ module controller (
                 enable   = 1'b1;
                 done     = 1'b0;
                 valid_in = (cycle_count <= 4'd6) ? 1'b1 : 1'b0;
-                next_state = (cycle_count == 4'd9) ? DONE : RUN;
+                next_state = state_t'((cycle_count == 4'd9) ? DONE : RUN);
             end
 
             DONE: begin
