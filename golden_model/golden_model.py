@@ -116,7 +116,7 @@ class ControllerGolden:
                 valid_in = 1
             else:
                 valid_in=0
-            if self.cycle_count == 9:
+            if self.cycle_count == 12:
                 self.current_state="DONE"
             else:
                 self.current_state = "RUN"
